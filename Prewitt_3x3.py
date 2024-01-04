@@ -2,24 +2,22 @@ import numpy as np
 from PIL import Image
 import matplotlib.pyplot as plt
 
-#sobel algorithm
+# sobel algorithm
 # Open the image
-img = np.array(Image.open('spider.PNG')).astype(np.uint8)
+img = np.array(Image.open('deneme.jpg')).astype(np.uint8)
 
 # Apply gray scale
+# The weights are calculated according to their wavelengths, so the improved formula will be like shown below
 gray_img = np.round(0.299 * img[:, :, 0] +
                     0.587 * img[:, :, 1] +
                     0.114 * img[:, :, 2]).astype(np.uint8)
 
 # Sobel Operator
 h, w = gray_img.shape
-# define filters
-horizontal = np.array([[-1, 0, 1], [-2, 0, 2], [-1, 0, 1]])  # s2
-vertical = np.array([[-1, -2, -1], [0, 0, 0], [1, 2, 1]])  # s1
 
-#prewitt algorithm
-#horizontal = np.array([[-1, 0, 1], [-1, 0, 1], [-1, 0, 1]])  # s2
-#vertical = np.array([[-1, -1, -1], [0, 0, 0], [1, 1, 1]])  # s1
+# prewitt algorithm
+horizontal = np.array([[-1, 0, 1], [-1, 0, 1], [-1, 0, 1]])  # s2
+vertical = np.array([[-1, -1, -1], [0, 0, 0], [1, 1, 1]])  # s1
 
 # define images with 0s
 newhorizontalImage = np.zeros((h, w))
@@ -39,7 +37,7 @@ for i in range(1, h - 1):
                          (horizontal[2, 1] * gray_img[i + 1, j]) + \
                          (horizontal[2, 2] * gray_img[i + 1, j + 1])
 
-        newhorizontalImage[i - 1, j - 1] = abs(horizontalGrad)
+        newhorizontalImage[i, j] = abs(horizontalGrad)
 
         verticalGrad = (vertical[0, 0] * gray_img[i - 1, j - 1]) + \
                        (vertical[0, 1] * gray_img[i - 1, j]) + \
@@ -51,14 +49,17 @@ for i in range(1, h - 1):
                        (vertical[2, 1] * gray_img[i + 1, j]) + \
                        (vertical[2, 2] * gray_img[i + 1, j + 1])
 
-        newverticalImage[i - 1, j - 1] = abs(verticalGrad)
+        newverticalImage[i, j] = abs(verticalGrad)
 
         # Edge Magnitude
+        # G=sqrt(Gx^2+Gy^2)
         mag = np.sqrt(pow(horizontalGrad, 2.0) + pow(verticalGrad, 2.0))
-        newgradientImage[i - 1, j - 1] = mag
+        # mag=abs(verticalGrad)+abs(horizontalGrad)
+        # mag=np.hypot(verticalGrad,horizontalGrad)
+        newgradientImage[i, j] = mag
 
 plt.figure()
-plt.title('dancing-spider-sobel.png')
-plt.imsave('dancing-spider-sobel.png', newgradientImage, cmap='gray', format='png')
+plt.title('deneme.jpg')
+plt.imsave('Mine_prewitt2.png', newgradientImage, cmap='gray', format='png')
 plt.imshow(newgradientImage, cmap='gray')
 plt.show()
