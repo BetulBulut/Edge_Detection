@@ -115,28 +115,40 @@ class Canny_5X5:
                 try:
                     q = 255
                     r = 255
+                    s = 255
+                    t = 255
 
                     # angle 0
                     if (0 <= angle[i, j] < 22.5) or (157.5 <= angle[i, j] <= 180):
                         q = img[i, j + 1]
                         r = img[i, j - 1]
+                        s = img[i, j - 2]
+                        t = img[i, j + 2]
                     # angle 45
                     elif (22.5 <= angle[i, j] < 67.5):
                         q = img[i + 1, j - 1]
                         r = img[i - 1, j + 1]
+                        s = img[i - 2, j + 2]
+                        t = img[i + 2, j - 2]
                     # angle 90
                     elif (67.5 <= angle[i, j] < 112.5):
                         q = img[i + 1, j]
                         r = img[i - 1, j]
+                        s = img[i - 2, j]
+                        t = img[i + 2, j]
                     # angle 135
                     elif (112.5 <= angle[i, j] < 157.5):
                         q = img[i - 1, j - 1]
                         r = img[i + 1, j + 1]
+                        s = img[i - 2, j - 2]
+                        t = img[i + 2, j + 2]
 
-                    if (img[i, j] >= q) and (img[i, j] >= r):
+                    if (img[i, j] >= q) and (img[i, j] >= r) and (img[i, j] >= s) and (img[i, j] >= t):
                         Z[i, j] = img[i, j]
                     else:
                         Z[i, j] = 0
+
+
 
 
                 except IndexError as e:
